@@ -46,3 +46,6 @@ class CustomUser(AbstractUser):
     
     def __str__(self):
         return self.first_name
+    
+    def get_fullname(self):
+        return self.email.split('@')[0]
