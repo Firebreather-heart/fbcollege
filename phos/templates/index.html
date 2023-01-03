@@ -45,12 +45,16 @@
 					</div>
 				</div>
 				<div class="col-lg-9 col-md-9">
-					<a href="" class="site-btn header-btn">Login</a>
+					{% if not user.is_authenticated %}
+						<a href="{% url 'login' %}" class="site-btn header-btn">Login</a>
+					{% else %} 
+						<a href="{% url 'logout' %}" class="site-btn header-btn">Logout</a>
+					{% endif %}
 					<nav class="main-menu">
 						<ul>
 							<li><a href="./blog.html">Home</a></li>
 							<li><a href="#">About us</a></li>
-							<li><a href="{% url 'manage_course_list' %}">Courses</a></li>
+							<li><a href="{% url 'course_list' %}">Courses</a></li>
 							<li><a href="./blog.html">News</a></li>
 							<li><a href="./contact.html">Contact</a></li>
 						</ul>

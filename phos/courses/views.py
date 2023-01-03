@@ -10,7 +10,7 @@ from django.forms.models import modelform_factory
 from django.apps import apps
 from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.views.generic.edit import FormView
+from django.core.cache import cache 
 
 #3rd party
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
@@ -56,7 +56,6 @@ class ManageCourseListView(ListView):
     model = Course 
     template_name = 'courses/manage/course/list.html'
    
-
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(owner = self.request.user)
@@ -170,15 +169,31 @@ class CourseListView(TemplateResponseMixin, View):
     template_name = 'courses/course/list.html'
 
     def get(self, request, subject=None):
-        subjects = Subject.objects.annotate(
-            total_courses = Count('courses')
-        )
-        courses = Course.objects.annotate(
+        # subjects = Subject.objects.annotate(
+        #     total_courses = Count('courses')
+        # )
+        subjects = cache.get('all_subjects')
+        if not subjects:
+            subjects = Subject.objects.annotate(
+                total_courses = Count('courses')
+            )
+            cache.set('all_subjects', subjects)
+
+        all_courses = Course.objects.annotate(
             total_modules = Count('modules')
-        )
+                                    )
         if subject:
             subject = get_object_or_404(Subject, slug = subject)
-            courses = courses.filter(subject=subject)
+            key = f'subject_{subject.id}_courses'
+            courses = cache.get(key)
+            if not courses:
+                courses = all_courses.filter(subject = subject)
+                cache.set(key, courses)
+        else:
+            courses = cache.get('all_courses')
+            if not courses:
+                courses = all_courses
+                cache.set('all_courses', courses)
         return self.render_to_response({
             'subjects': subjects,
             'subject':subject,
@@ -196,42 +211,3 @@ class CourseDetailView(DetailView):
         )
         return context 
 
-class StudentEnrollCourseView(LoginRequiredMixin, FormView):
-    course = None 
-    form_class = CourseEnrollForm
-
-    def form_valid(self, form):
-        self.course = form.cleaned_data['course']
-        self.course.students.add(self.request.user)
-        return super().form_valid(form) 
-    
-    def get_success_url(self):
-        return reverse_lazy('student_course_detail', args = [self.course.id])
-
-class StudentCourseListView(LoginRequiredMixin, ListView):
-    model = Course
-    template_name = 'students/course/list.html'
-    
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(students__in=[self.request.user])
-
-class StudentCourseDetailView(DetailView):
-    model = Course 
-    template_name = 'students/course/detail.html'
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(students__in = [self.request.user])
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        course = self.get_object()
-        if 'module_id' in self.kwargs:
-            context['module'] = course.modules.get(
-                id = self.kwargs['module_id']
-            )
-        else:
-            context['module'] = course.modules.all()[0]
-        return context

@@ -20,9 +20,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('users.urls')),
+    path('me/', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('courses.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
     
 ]
 

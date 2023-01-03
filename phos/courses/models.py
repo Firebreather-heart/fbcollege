@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
+from django.template.loader import render_to_string
 # Create your models here.
 class ItemBase(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name = '%(class)s_related', on_delete=models.CASCADE)
@@ -12,6 +13,12 @@ class ItemBase(models.Model):
 
     class Meta:
         abstract =True 
+    
+    def render(self):
+        return render_to_string(
+            f'courses/content/{self._meta.model_name}.html',
+            {'item':self}
+        )
     
     def __str__(self):
         return self.title 
