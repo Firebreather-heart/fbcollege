@@ -1,0 +1,58 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/w3.css' %}">
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+{% if form.errors %}
+<p>Invalid login credentials </p>
+{% else %}
+<div class="w3-container w3-card w3-padding logbox">
+    <h2 class=" w3-text-white w3-xxlarge"> FBCollege Login</h2>
+    <div class="">
+        <form action="{% url 'login'  %}" class="w3-white w3-padding w3-round-large" method="post">
+            {{ user_form.non_field_errors }}
+            {% if user_form.subject.errors %}
+            {% if messages %}
+            <div class="w3-red w3-bar">
+                {% for message in messages %}
+                <div{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</div>
+                    {% endfor %}
+            </div>
+            {% endif %}
+
+            <ol>
+                {% for error in user_form.subject.errors %}
+                <li><strong>{{ error|escape }}</strong></li>
+                {% endfor %}
+            </ol>
+            {% endif %}
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit" class="sign-button">Log-in</button>
+        </form>
+    </div>
+    <div class=" w3-text-white" style=" display: flex;">
+        <p>Forgotten your password?<a class="w3-text-red" href="{% url 'password_reset' %}"> Reset</a></p>
+        <p> No account yet? <a class="w3-text-red" href="{% url 'signup' %}"> Sign Up</a></p>
+    </div>
+</div>
+{% endif %}
+<style>
+    body {
+        height: 100vh;
+        display: flex;
+        font-family: sans-serif;
+        justify-content: center;
+        background: url("{% static 'img/bg.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        align-items: center;
+
+    }
+
+    @media screen and (max-width:600px) {
+        .logbox {
+            width: 500px;
+            height: 700px;
+        }
+    }
+</style>

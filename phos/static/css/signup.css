@@ -1,0 +1,82 @@
+
+* {
+    box-sizing: border-box;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+p input {
+    padding: 8px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%
+}
+
+select{
+    background-color: rgb(141, 193, 246);
+    border-radius: 5px;
+}
+.sign-button {
+    border: 0.1px solid blue;
+    color: blue;
+    padding: 5px;
+    border-radius: 5px;
+    background: -webkit-linear-gradient(right,#00dbde,#fc00ff,#00dbde,#fc00ff);
+    transition: 1s;
+    position: relative;
+    width: 50%;
+    left: 25%;
+}
+
+.sign-button:hover {
+    color: white;
+    background-color: blue;
+    border: 0.1px solid yellow;
+}
+
+.errorlist {
+    display: block;
+    background-color: red;
+    color: white;
+    list-style-type: none;
+}
+
+
+
+.md-container {
+    width: 40%;
+    height: 600px;
+    border: 0.5px solid rgb(107, 107, 209);
+    overflow-y: auto;
+    position: fixed;
+    left: 20%;
+    top: 10%;
+    border-radius: 10px;
+    background-color: white;
+    padding: 12px;
+}
+.gr{
+    position: fixed;
+    left: 22%;
+    top: 2%;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+.gr-bottom{
+    position: fixed;
+    left: 28%;
+    bottom: 18%;
+    font-weight: 200;
+}
+.reg-form {
+    overflow-y: none;
+
+}
+
+.helptext {
+    display: none;
+}
