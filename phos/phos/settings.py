@@ -32,16 +32,19 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
 
+    'channels',
     #auth 
     'users.apps.UsersConfig',
 
     #local
     'courses.apps.CoursesConfig',
+    'chat.apps.ChatConfig',
 
     #3rd party
     'embed_video',
     'debug_toolbar',
     'redisboard',
+    
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,6 +69,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'phos.urls'
 
+# CHANNEL_LAYERS = {
+#     'default': 'asgi_redis.RedisChannelLayer',
+#     'CONFIG': {
+#         'hosts': [('localhost', 6379)],
+#     },
+#     'ROUTING': 'phos.routing.channel_routing',
+# }
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -89,8 +100,9 @@ CACHES = {
     }
 }
 
-WSGI_APPLICATION = 'phos.wsgi.application'
 
+WSGI_APPLICATION = 'phos.wsgi.application'
+ASGI_APPLICATION = 'phos.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -159,3 +171,5 @@ INTERNAL_IPS = [
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 60 * 15 # 15 minutes
 CACHE_MIDDLEWARE_KEY_PREFIX = 'phos'
+
+

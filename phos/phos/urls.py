@@ -24,6 +24,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('courses.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
+    path('chat/', include('chat.urls', namespace='chat')),
     
 ]
 
