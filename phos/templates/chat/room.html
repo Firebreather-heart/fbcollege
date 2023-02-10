@@ -9,6 +9,24 @@
 </div>
 {% endblock %}
 {% block include_js %}
+    {{ course.id|json_script: "course-id" }}
 {% endblock %}
 {% block domready %}
+    const courseId = JSON.parse(
+        document.getElementById('course-id').textContent
+    );
+    const url = 'ws://' + window.location.host + 'ws/chat/room/' + courseId + '/';
+    const chatSocket = new WebSoclet(url);
+
+    chatSocket.onmessage = fucntion(event){
+        const data = JSON.parse(event.data);
+        const chat = document.getElementById('chat');
+
+        chat.innerHTML += "<div class='message'>" + data.message + "</div>";
+        chat.scrollTop = chat.scrollHeight;
+    };
+
+    chatSocket.onclose = function(event){
+        console.error('Chat socket closed unexpectedly');
+    }
 {% endblock %}

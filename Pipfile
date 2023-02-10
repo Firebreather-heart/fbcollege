@@ -9,6 +9,13 @@ django-jazzmin = "*"
 django-rest-framework = "*"
 pillow = "*"
 python-dotenv = "*"
+django-embed-video = "*"
+django-debug-toolbar = "*"
+django-redisboard = "*"
+channels-redis = "*"
+django-braces = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 

@@ -210,4 +210,3 @@ class CourseDetailView(DetailView):
             initial={'course': self.object}
         )
         return context 
-
